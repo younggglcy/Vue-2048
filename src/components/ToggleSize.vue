@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import { ref, Ref } from 'vue'
-
 interface Props {
   size: number
 }
 const props = defineProps<Props>()
 
+const emits = defineEmits<Emits>()
 interface Emits {
   (e: 'onSizeChange', val: number): void
 }
-const emits = defineEmits<Emits>()
 </script>
 
 <template>
@@ -18,9 +16,15 @@ const emits = defineEmits<Emits>()
     class="justify-around"
     w="full"
   >
-    <div class="item" @click="$emit('onSizeChange', 3)" :class="{ 'item-active': size === 3 }">3*3</div>
-    <div class="item" @click="$emit('onSizeChange', 4)" :class="{ 'item-active': size === 4 }">4*4</div>
-    <div class="item" @click="$emit('onSizeChange', 5)" :class="{ 'item-active': size === 5 }">5*5</div>
+    <div class="item" :class="{ 'item-active': size === 3 }" @click="$emit('onSizeChange', 3)">
+      3*3
+    </div>
+    <div class="item" :class="{ 'item-active': size === 4 }" @click="$emit('onSizeChange', 4)">
+      4*4
+    </div>
+    <div class="item" :class="{ 'item-active': size === 5 }" @click="$emit('onSizeChange', 5)">
+      5*5
+    </div>
   </div>
 </template>
 

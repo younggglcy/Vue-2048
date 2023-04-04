@@ -7,16 +7,16 @@ const toggleDark = useToggle(isDark)
 </script>
 
 <template>
-  <button 
-    @click="toggleDark()"
+  <button
     flex="~"
     class="items-center"
+    @click="toggleDark()"
   >
     <div w="min-12 12" h="min-12 12">
-      <moon v-if="isDark" class="align-middle" />
-      <sunny v-else="isDark" class="align-middle" />
+      <Moon v-if="isDark" class="align-middle" />
+      <Sunny v-else class="align-middle" />
     </div>
 
-    <span class="mx-2">{{ isDark ? 'Dark': 'Light' }}</span>
+    <span class="mx-2">{{ isDark ? 'Dark' : 'Light' }}</span>
   </button>
 </template>

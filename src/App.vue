@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { ref, Ref, onMounted } from 'vue'
-import ToggleDark from '~/components/ToggleDark.vue'
-import ToggleSize from '~/components/ToggleSize.vue'
+import type { Ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
 import { Refresh } from '@element-plus/icons-vue'
+import ToggleDark from '~/components/ToggleDark.vue'
+import ToggleSize from '~/components/ToggleSize.vue'
 import colors from '~/styles/color'
 
 const curScore = ref(0)
 const histroyBest = [
   useLocalStorage('histroyBest-3*3', 0),
   useLocalStorage('histroyBest-4*4', 0),
-  useLocalStorage('histroyBest-5*5', 0)
+  useLocalStorage('histroyBest-5*5', 0),
 ]
 const size = ref(4)
 
@@ -33,9 +34,8 @@ function restart() {
 function randomGenerate() {
   const emptyCells = arr.value.reduce((acc: Array<[number, number]>, row, i) => {
     row.forEach((cell, j) => {
-      if (cell === 0) {
+      if (cell === 0)
         acc.push([i, j])
-      }
     })
     return acc
   }, [])
@@ -50,66 +50,67 @@ function randomGenerate() {
 }
 
 function gameOver() {
-  if (curScore.value > histroyBest[size.value - 3].value) {
+  if (curScore.value > histroyBest[size.value - 3].value)
     histroyBest[size.value - 3].value = curScore.value
-  }
+
   restart()
 }
 
 onMounted(() => {
   randomGenerate()
 
-  window.addEventListener("keyup", (e) => {
-    if (e.key === 'ArrowLeft') {
+  window.addEventListener('keyup', (e) => {
+    if (e.key === 'ArrowLeft')
       move('left')
-    } else if (e.key === 'ArrowRight') {
+    else if (e.key === 'ArrowRight')
       move('right')
-    } else if (e.key === 'ArrowUp') {
+    else if (e.key === 'ArrowUp')
       move('up')
-    } else if (e.key === 'ArrowDown') {
+    else if (e.key === 'ArrowDown')
       move('down')
-    }
   })
 })
 
 function getCellBgColor(val: number): string {
-  if (val > 8192) {
+  if (val > 8192)
     return colors['color-beyond']
-  } else {
+  else
     return colors[`color-${val}`]
-  }
 }
 
 function move(dir: 'left' | 'right' | 'up' | 'down') {
   if (dir === 'left') {
-    arr.value = arr.value.map((row) => merge(row, true))
-  } else if (dir === 'right') {
-    arr.value = arr.value.map((row) => merge(row, false))
-  } else if (dir === 'up') {
+    arr.value = arr.value.map(row => merge(row, true))
+  }
+  else if (dir === 'right') {
+    arr.value = arr.value.map(row => merge(row, false))
+  }
+  else if (dir === 'up') {
     let cols: number[][] = []
     for (let i = 0; i < size.value; i++) {
-      let col: number[] = []
-      for (let j = 0; j < size.value; j++) {
+      const col: number[] = []
+      for (let j = 0; j < size.value; j++)
         col.push(arr.value[j][i])
-      }
+
       cols.push(col)
     }
-    cols = cols.map((col) => merge(col, true))
+    cols = cols.map(col => merge(col, true))
     cols.forEach((col, i) => {
       col.forEach((cell, j) => {
         arr.value[j][i] = cell
       })
     })
-  } else if (dir === 'down') {
+  }
+  else if (dir === 'down') {
     let cols: number[][] = []
     for (let i = 0; i < size.value; i++) {
-      let col: number[] = []
-      for (let j = 0; j < size.value; j++) {
+      const col: number[] = []
+      for (let j = 0; j < size.value; j++)
         col.push(arr.value[j][i])
-      }
+
       cols.push(col)
     }
-    cols = cols.map((col) => merge(col, false))
+    cols = cols.map(col => merge(col, false))
     cols.forEach((col, i) => {
       col.forEach((cell, j) => {
         arr.value[j][i] = cell
@@ -120,7 +121,7 @@ function move(dir: 'left' | 'right' | 'up' | 'down') {
 }
 
 function merge(tar: number[], ltor: boolean): number[] {
-  const filteredTar = tar.filter((cell) => !!cell)
+  const filteredTar = tar.filter(cell => !!cell)
   let first, second
   const ret: number[] = []
   if (ltor) {
@@ -132,20 +133,21 @@ function merge(tar: number[], ltor: boolean): number[] {
         ret.push(first + second)
         curScore.value += first + second
         j++
-        if (j < filteredTar.length) first = filteredTar[j]
-        else {
+        if (j < filteredTar.length)
+          first = filteredTar[j]
+        else
           break
-        }
-      } else {
+      }
+      else {
         ret.push(first)
         first = second
       }
     }
     ret.push(first)
-    while(ret.length < size.value) {
+    while (ret.length < size.value)
       ret.push(0)
-    }
-  } else {
+  }
+  else {
     first = filteredTar[filteredTar.length - 1]
     second = null
     for (let j = filteredTar.length - 2; j >= 0; j--) {
@@ -154,23 +156,22 @@ function merge(tar: number[], ltor: boolean): number[] {
         ret.unshift(first + second)
         curScore.value += first + second
         j--
-        if (j >= 0) first = filteredTar[j]
-        else {
+        if (j >= 0)
+          first = filteredTar[j]
+        else
           break
-        }
-      } else {
+      }
+      else {
         ret.unshift(first)
         first = second
       }
     }
     ret.unshift(first)
-    while(ret.length < size.value) {
+    while (ret.length < size.value)
       ret.unshift(0)
-    }
   }
   return ret
 }
-
 </script>
 
 <template>
@@ -179,8 +180,10 @@ function merge(tar: number[], ltor: boolean): number[] {
     class="justify-between items-center py-16 dark:bg-dark-800 dark:text-light-400"
     h="full"
   >
-    <header flex="~ col" class="w-3/4" >
-      <h1 class="flex-grow-[1] text-center font-bold text-2xl -mt-4 mb-12">Press ↑←↓→ to play 2048!</h1>
+    <header flex="~ col" class="w-3/4">
+      <h1 class="flex-grow-[1] text-center font-bold text-2xl -mt-4 mb-12">
+        Press ↑←↓→ to play 2048!
+      </h1>
       <div class="flex-grow-[2] items-center justify-around" flex="~">
         <ToggleDark class="mr-4" />
         <ToggleSize :size="size" @onSizeChange="handleSizeChange" />
@@ -190,24 +193,24 @@ function merge(tar: number[], ltor: boolean): number[] {
     <main
       grid="~"
       class="justify-items-center items-center"
-      :style="{ 
+      :style="{
         gridTemplateRows: `repeat(${size}, 1fr)`,
         gridTemplateColumns: `repeat(${size}, 1fr)`,
         height: `${size * 5}rem`,
-        width: `${size * 5}rem`
+        width: `${size * 5}rem`,
       }"
     >
       <template
-        v-for="(row, rowIdx) of arr" 
+        v-for="(row, rowIdx) of arr"
         :key="rowIdx"
       >
-        <div 
-          v-for="(item, idx) of row" 
+        <div
+          v-for="(item, idx) of row"
           :key="idx"
           :style="{
             gridRow: `${rowIdx + 1} / span 1`,
             gridColumn: `${idx + 1} / span 1`,
-            backgroundColor: `${getCellBgColor(item)}`
+            backgroundColor: `${getCellBgColor(item)}`,
           }"
           w="full"
           h="full"
@@ -219,10 +222,14 @@ function merge(tar: number[], ltor: boolean): number[] {
         </div>
       </template>
     </main>
-    
+
     <footer flex="~" class="items-center w-3/4">
-      <div class="flex-auto text-center">History Best:<span>{{ histroyBest[size - 3] }}</span></div>
-      <div class="flex-auto text-center">Current:<span>{{ curScore }}</span></div>
+      <div class="flex-auto text-center">
+        History Best:<span>{{ histroyBest[size - 3] }}</span>
+      </div>
+      <div class="flex-auto text-center">
+        Current:<span>{{ curScore }}</span>
+      </div>
       <div flex="~" class="flex-auto items-center justify-center">
         <div w="max-12 12" h="max-12 12">
           <Refresh class="align-middle hover:cursor-pointer" w="full" h="full" @click.stop="restart" />
