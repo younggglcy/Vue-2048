@@ -12,7 +12,6 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.10",
     "@vueuse/core": "^9.5.0",
-    "element-plus": "^2.2.21",
     "vue": "^3.2.45"
   },
   "devDependencies": {
