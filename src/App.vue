@@ -231,7 +231,7 @@ function merge(tar: number[], ltor: boolean): number[] {
         Current:<span>{{ curScore }}</span>
       </div>
       <div flex="~" class="flex-auto items-center justify-center">
-        <div w="max-12 12" h="max-12 12">
+        <div w="12" h="12" class="max-w-12 min-w-12">
           <Refresh class="align-middle hover:cursor-pointer" w="full" h="full" @click.stop="restart" />
         </div>
         <span class="ml-4 hover:cursor-pointer" @click.stop="restart">Restart Game</span>

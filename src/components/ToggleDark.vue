@@ -12,7 +12,7 @@ const toggleDark = useToggle(isDark)
     class="items-center"
     @click="toggleDark()"
   >
-    <div w="min-12 12" h="min-12 12">
+    <div w="12" h="12" class="min-w-12 min-h-12">
       <Moon v-if="isDark" class="align-middle" />
       <Sunny v-else class="align-middle" />
     </div>
